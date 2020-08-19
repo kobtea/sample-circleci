@@ -1,0 +1,47 @@
+before:
+  hooks:
+    - go mod download
+    - go generate ./...
+builds:
+  - main: ./main.go
+    ldflags:
+      - -s -w
+      - -X github.com/kobtea/sample-circleci/cmd.Version={{.Version}}
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+archives:
+  - replacements:
+      darwin: Darwin
+      linux: Linux
+      windows: Windows
+      386: i386
+      amd64: x86_64
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+dockers:
+  - goos: linux
+    goarch: amd64
+    image_templates:
+      - kobtea/sample-circleci:latest
+      - kobtea/sample-circleci:v{{ .Major }}
+      - kobtea/sample-circleci:{{ .Tag }}
+    dockerfile: Dockerfile.goreleaser
+nfpms:
+  - homepage: https://github.com/kobtea/sample-circleci
+    maintainer: Hiroaki Kobayashi <kobtea9696@gmail.com>
+    description: sample github actions
+    license: MIT
+    formats:
+      - deb
+      - rpm
