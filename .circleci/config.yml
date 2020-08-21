@@ -12,7 +12,7 @@ jobs:
     working_directory: /go/src/github.com/kobtea/sample-circleci
     steps:
       - checkout
-      - run: golangci-lint -E golint,gofmt,goimports
+      - run: golangci-lint run -E golint,gofmt,goimports
   build:
     executor: golang
     steps:
