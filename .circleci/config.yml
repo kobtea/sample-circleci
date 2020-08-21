@@ -6,9 +6,23 @@ executors:
     working_directory: /go/src/github.com/kobtea/sample-circleci
 
 jobs:
+  lint:
+    docker:
+      - image: golangci/golangci-lint
+    working_directory: /go/src/github.com/kobtea/sample-circleci
+    steps:
+      - checkout
+      - run: golangci-lint -E golint,gofmt,goimports
   build:
     executor: golang
     steps:
       - checkout
       - run: make test
       - run: make build
+
+workflows:
+  version: 2
+  check:
+    jobs:
+      - lint
+      - build
