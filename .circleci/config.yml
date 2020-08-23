@@ -30,7 +30,7 @@ jobs:
       - run: |
           sudo apt-get update
           sudo apt-get install -y rpm
-          curl -sL https://git.io/goreleaser | bash release --rm-dist
+          curl -sL https://git.io/goreleaser | bash
       - run: make docker-release
 
 workflows:
