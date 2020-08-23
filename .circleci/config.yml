@@ -1,4 +1,7 @@
 version: 2.1
+orbs:
+  release-tag: kobtea/release-tag@dev:master
+
 executors:
   golang:
     docker:
@@ -19,6 +22,10 @@ jobs:
       - checkout
       - run: make test
       - run: make build
+  tagging:
+    steps:
+      - checkout
+      - release-tag/tagging
 
 workflows:
   version: 2
@@ -26,3 +33,4 @@ workflows:
     jobs:
       - lint
       - build
+      - tagging
