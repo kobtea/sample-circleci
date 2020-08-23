@@ -30,8 +30,8 @@ jobs:
       - run: |
           sudo apt-get update
           sudo apt-get install -y rpm
+          echo "$DOCKERHUB_PASS" | docker login --username $DOCKERHUB_USER --password-stdin
           curl -sL https://git.io/goreleaser | bash
-      - run: make docker-release
 
 workflows:
   version: 2

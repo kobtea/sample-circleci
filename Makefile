@@ -17,14 +17,3 @@ test:
 
 build:
 	go build -ldflags='-s -w -X github.com/kobtea/sample-circleci/cmd.Version=$(shell cat VERSION)'
-
-release:
-	@goreleaser release --rm-dist
-
-docker-build:
-	@docker build -t $(DOCKER_REPO):$(shell cat VERSION) -t $(DOCKER_REPO):latest .
-
-docker-release: docker-build
-	@docker login -u ${DOCKERHUB_USER} -p ${DOCKERHUB_PASS}
-	@docker push $(DOCKER_REPO):$(shell cat VERSION)
-	@docker push $(DOCKER_REPO):latest
