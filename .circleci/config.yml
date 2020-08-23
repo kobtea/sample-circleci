@@ -22,10 +22,6 @@ jobs:
       - checkout
       - run: make test
       - run: make build
-  tagging:
-    steps:
-      - checkout
-      - release-tag/tagging
 
 workflows:
   version: 2
@@ -33,4 +29,4 @@ workflows:
     jobs:
       - lint
       - build
-      - tagging
+      - release-tag/tagging
