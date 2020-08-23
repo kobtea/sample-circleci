@@ -29,4 +29,5 @@ workflows:
     jobs:
       - lint
       - build
-      - release-tag/tagging
+      - release-tag/tagging:
+          fingerprint: bc:64:46:46:3c:c4:a2:2c:e2:1a:af:ae:07:c0:b1:39
