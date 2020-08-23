@@ -22,6 +22,16 @@ jobs:
       - checkout
       - run: make test
       - run: make build
+  release:
+    executor: golang
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run: |
+          sudo apt-get update
+          sudo apt-get install -y rpm
+          make release
+          make docker-release
 
 workflows:
   version: 2
@@ -31,3 +41,15 @@ workflows:
       - build
       - release-tag/tagging:
           fingerprint: bc:64:46:46:3c:c4:a2:2c:e2:1a:af:ae:07:c0:b1:39
+          requires:
+            - lint
+            - build
+  release:
+    jobs:
+      - release:
+          context: org-global
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /v[0-9]+(\.[0-9]+)*(-.*)*/

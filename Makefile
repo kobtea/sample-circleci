@@ -1,4 +1,8 @@
-PHONY: setup lint fmt test build
+GOPATH      ?= $(shell go env GOPATH)
+GORELEASER  ?= $(GOPATH)/bin/goreleaser
+DOCKER_REPO := kobtea/sample-circleci
+
+PHONY: setup lint fmt test build release docker-build docker-release
 
 setup:
 	go get golang.org/x/tools/cmd/goimports
@@ -15,3 +19,17 @@ test:
 
 build:
 	go build -ldflags='-s -w -X github.com/kobtea/sample-circleci/cmd.Version=$(shell cat VERSION)'
+
+release: $(GORELEASER)
+	$(GORELEASER) release --rm-dist
+
+docker-build:
+	@docker build -t $(DOCKER_REPO):$(shell cat VERSION) -t $(DOCKER_REPO):latest .
+
+docker-release: docker-build
+	@docker login -u ${DOCKERHUB_USER} -p ${DOCKERHUB_PASS}
+	@docker push $(DOCKER_REPO):$(shell cat VERSION)
+	@docker push $(DOCKER_REPO):latest
+
+$(GORELEASER):
+    @curl -sL https://git.io/goreleaser | bash
