@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  release-tag: kobtea/release-tag@dev:master
+  release-tag: kobtea/release-tag@0.0.1
 
 executors:
   golang:
